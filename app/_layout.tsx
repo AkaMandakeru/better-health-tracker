@@ -1,5 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import "@/global.css";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { SessionProvider } from './authContext';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -42,18 +45,24 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return <GluestackUIProvider mode="light"><RootLayoutNav /></GluestackUIProvider>;
 }
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <SessionProvider>
+      <GluestackUIProvider mode="light">
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="login" options={{ headerShown: false }} />
+            <Stack.Screen name="signup" options={{ headerShown: false }} />
+          </Stack>
+        </ThemeProvider>
+      </GluestackUIProvider>
+    </SessionProvider>
   );
 }
